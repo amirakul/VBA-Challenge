@@ -1,0 +1,140 @@
+Attribute VB_Name = "Module1"
+Sub stock()
+
+'Setting Variables
+Dim book As Workbook
+Dim sheet As Worksheet
+Dim ticker_name As String
+Dim ticker_total_volume As Double
+Dim i As Long
+Dim Summary_table As Long
+Dim LastRow As Long
+Dim open_stock As Double
+Dim close_stock As Double
+Dim yearly_change As Double
+Dim percent_change As Double
+Dim daily_change As Double
+Dim average_change As Double
+Dim start As Long
+Dim open_price As Double
+Dim close_price As Double
+Dim days As Integer
+Dim greatest_percent_inc As Double
+Dim greatest_percent_decr As Double
+Dim greatest_total_volume As Double
+Dim max As Double
+Dim min As Long
+
+
+
+For Each sheet In ActiveWorkbook.Worksheets
+
+
+
+'Setting Initial Values
+
+ticker_total_volume = 0
+Summary_table = 2
+yearly_change = 0
+start = 2
+
+
+'Labeling Title Row
+sheet.Range("I1").Value = "Ticker"
+sheet.Range("J1").Value = "Yearly Change"
+sheet.Range("K1").Value = "Percent Change"
+sheet.Range("L1").Value = "Total Stock Volume"
+sheet.Range("P1").Value = "Ticker"
+sheet.Range("Q1").Value = "Value"
+sheet.Range("O2").Value = "Greatest % Increase"
+sheet.Range("O3").Value = "Greatest % Decrease"
+sheet.Range("O4").Value = "Greatest Total Volume"
+
+'Counting all rows
+LastRow = sheet.Cells(Rows.Count, "A").End(xlUp).Row
+
+'Looping ticker names and total volume
+open_price = sheet.Cells(start, 3).Value
+
+For i = 2 To LastRow
+    If sheet.Cells(i + 1, 1).Value <> sheet.Cells(i, 1).Value Then
+        ticker_name = sheet.Cells(i, 1).Value
+        
+        close_price = sheet.Cells(i, 6).Value
+        ticker_total_volume = ticker_total_volume + sheet.Cells(i, 7).Value
+        yearly_change = close_price - open_price
+        
+         If open_price = 0 Then
+                percent_change = 0
+            
+         Else
+                 percent_change = yearly_change / open_price
+        End If
+        
+        
+        
+        
+        start = i + 1
+        open_price = sheet.Cells(start, 3).Value
+        
+        
+        sheet.Range("I" & Summary_table).Value = ticker_name
+        sheet.Range("L" & Summary_table).Value = ticker_total_volume
+        sheet.Range("J" & Summary_table).Value = yearly_change
+        sheet.Range("K" & Summary_table).Value = Format(percent_change, "0.00%")
+     
+        ticker_total_volume = 0
+        yearly_change = 0
+        percent_change = 0
+        
+       'Coloring negatives red and positives green
+       
+       If sheet.Range("J" & Summary_table).Value <= 0 Then
+            sheet.Range("J" & Summary_table).Interior.ColorIndex = 3
+    Else
+            sheet.Range("J" & Summary_table).Interior.ColorIndex = 4
+    End If
+    
+    Summary_table = Summary_table + 1
+
+    
+ 
+    
+    Else
+        ticker_total_volume = ticker_total_volume + sheet.Cells(i, 7).Value
+        percent_change = 0
+    
+    End If
+    
+    start = i + 1
+
+     
+Next i
+
+
+
+
+  ' Finding the max and min
+    sheet.Range("Q2") = "%" & Application.WorksheetFunction.max(sheet.Range("K2:K" & LastRow)) * 100
+    sheet.Range("Q3") = "%" & Application.WorksheetFunction.min(sheet.Range("K2:K" & LastRow)) * 100
+    sheet.Range("Q4") = Application.WorksheetFunction.max(sheet.Range("L2:L" & LastRow))
+
+    ' returns one less because header row not a factor
+    increase_number = Application.WorksheetFunction.Match(Application.WorksheetFunction.max(sheet.Range("K2:K" & LastRow)), sheet.Range("K2:K" & LastRow), 0)
+    decrease_number = Application.WorksheetFunction.Match(Application.WorksheetFunction.min(sheet.Range("K2:K" & LastRow)), sheet.Range("K2:K" & LastRow), 0)
+    volume_number = Application.WorksheetFunction.Match(Application.WorksheetFunction.max(sheet.Range("L2:L" & LastRow)), sheet.Range("L2:L" & LastRow), 0)
+
+    ' final ticker symbol for  total, greatest % of increase and decrease, and average
+    sheet.Range("P2") = sheet.Cells(increase_number + 1, 9)
+    sheet.Range("P3") = sheet.Cells(decrease_number + 1, 9)
+    sheet.Range("P4") = sheet.Cells(volume_number + 1, 9)
+
+
+Next sheet
+
+End Sub
+
+
+    
+
+
