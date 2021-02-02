@@ -22,7 +22,9 @@ In order to run the analysis, I create a script that will loop through all the s
 
   * Included conditional formatting that will highlight positive change in green and negative change in red.
  
- Here are the screenshot of how the conditional formatting looks like for year 2014:
+ Here are the screenshots of how the conditional formatting looks like each year.
+ 
+ Year 2014 stock price change:
  
  ![image1](2014_Result_Screenshot.png)
 
