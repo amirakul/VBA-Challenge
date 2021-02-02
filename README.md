@@ -22,6 +22,16 @@ In order to run the analysis, I create a script that will loop through all the s
 
   * Included conditional formatting that will highlight positive change in green and negative change in red.
  
- Here are the screenshot of how the conditional formatting looks like:
+ Here are the screenshot of how the conditional formatting looks like for year 2014:
+ 
  ![image1](2014_Result_Screenshot.png)
 
+ Year 2015 stock price change:
+ 
+ ![image2](2015_Result_Screenshot.png)
+ 
+ Year 2016 stock price change:
+ 
+ ![image2](2016_Result_Screenshot.png)
+ 
+ These calculations also display the greatest percent increase, decrease and the greatest total volume for each year.
